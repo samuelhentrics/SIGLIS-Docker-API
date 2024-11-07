@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 
 // Connexion à MongoDB
 //mongoose.connect('mongodb://ycabrol:AECDTQN@ihatia:27017/nodenot_bd1?authSource=admin');
-mongoose.connect('mongodb://127.0.0.1:27017/nodenot_bd1?authSource=admin');
+mongoose.connect('mongodb://db:27017/nodenot_bd1?authSource=admin');
 
 const conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'Erreur de connexion à MongoDB :'));
