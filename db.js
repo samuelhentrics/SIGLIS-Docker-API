@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 
 // Créer une instance d'Express
 const app = express();
-const PORT = process.env.PORT || 6000;
-console.log("API LANCE SUR LE PORT : " + PORT)
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
