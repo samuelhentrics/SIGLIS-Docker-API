@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 // Créer une instance d'Express
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 6000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -45,6 +45,16 @@ conn.once('open', () => {
 //     res.status(500).json({ error: 'Erreur serveur' });
 //   }
 // });
+
+app.get('/api/test', async (req, res) => {
+  try {
+    console.log("API Commandes")
+    res.json("{'test':'test'}");
+  } catch (error) {
+    console.error('Erreur lors de la récupération des commandes :', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
 
 // Commandes
 app.get('/api/commandes', async (req, res) => {
