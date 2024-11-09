@@ -22,6 +22,13 @@ mongoose.connect('mongodb://db:27017/nodenot_bd1?authSource=admin');
 const conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'Erreur de connexion à MongoDB :'));
 conn.once('open', () => {
+  try {
+    console.log("API Commandes")
+    const commandes = conn.db.collection('Articles').find().toArray();
+    console.log(commandes);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des commandes :', error);
+  }
   console.log('Connecté à MongoDB');
 });
 
