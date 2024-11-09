@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // Créer une instance d'Express
 const app = express();
 const PORT = process.env.PORT || 6000;
-
+console.log("API LANCE SUR LE PORT : " + PORT)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -23,7 +23,7 @@ const conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'Erreur de connexion à MongoDB :'));
 conn.once('open', () => {
   try {
-    console.log("API Commandes")
+    console.log("API Login test")
     const commandes = conn.db.collection('Articles').find().toArray();
     console.log(commandes);
   } catch (error) {
@@ -48,7 +48,7 @@ conn.once('open', () => {
 
 app.get('/api/test', async (req, res) => {
   try {
-    console.log("API Commandes")
+    console.log("API TEST")
     res.json("{'test':'test'}");
   } catch (error) {
     console.error('Erreur lors de la récupération des commandes :', error);
