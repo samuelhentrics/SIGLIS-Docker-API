@@ -16,8 +16,7 @@ app.use((req, res, next) => {
 });
 
 // Connexion à MongoDB
-//mongoose.connect('mongodb://ycabrol:AECDTQN@ihatia:27017/nodenot_bd1?authSource=admin');
-mongoose.connect('mongodb://db:27017/boutique?authSource=admin');
+mongoose.connect('mongodb://mongouser:mongopassword@db:27017/boutique?authSource=admin');
 
 const conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'Erreur de connexion à MongoDB :'));
@@ -217,6 +216,62 @@ app.get('/api/articles/:id', async (req, res) => {
   }
 });
 
+// Route pour créer un article
+app.post('/api/articles', async (req, res) => {
+  const article = req.body;
+  try {
+    const result = await conn.db.collection('Articles').insertOne(article);
+    res.status(201).json(result.ops[0]);
+  } catch (error) {
+    console.error('Erreur lors de la création de l\'article :', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Route pour créer une commande
+app.post('/api/commandes', async (req, res) => {
+  const commande = req.body;
+  try {
+    const result = await conn.db.collection('Commandes').insertOne(commande);
+    res.status(201).json(result.ops[0]);
+  } catch (error) {
+    console.error('Erreur lors de la création de la commande :', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Route pour ajouter un article à une commande
+app.post('/api/commandes/:id/articles', async (req, res) => {
+  const commandeId = parseInt(req.params.id);
+  const article = req.body;
+  try {
+    const result = await conn.db.collection('Commandes').updateOne(
+      { Numero: commandeId },
+      { $push: { LignesDeCommande: article } }
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout de l\'article à la commande :', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Route pour augmenter ou diminuer la quantité d'un article dans une commande
+app.post('/api/commandes/:id/articles/:articleId', async (req, res) => {
+  const commandeId = parseInt(req.params.id);
+  const articleId = req.params.articleId;
+  const { quantity } = req.body;
+  try {
+    const result = await conn.db.collection('Commandes').updateOne(
+      { Numero: commandeId, 'LignesDeCommande.Article': articleId },
+      { $inc: { 'LignesDeCommande.$.Quantite': quantity } }
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de la quantité de l\'article dans la commande :', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
