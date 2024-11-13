@@ -21,13 +21,6 @@ mongoose.connect('mongodb://mongouser:mongopassword@db:27017/boutique?authSource
 const conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'Erreur de connexion à MongoDB :'));
 conn.once('open', () => {
-  try {
-    console.log("API Login test")
-    const commandes = conn.db.collection('Articles').find().toArray();
-    console.log(commandes);
-  } catch (error) {
-    console.error('Erreur lors de la récupération des commandes :', error);
-  }
   console.log('Connecté à MongoDB');
 });
 
@@ -234,7 +227,7 @@ app.post('/api/commandes', async (req, res) => {
   try {
     console.log(commande)
     const result = await conn.db.collection('Commandes').insertOne(commande);
-    res.status(201).json(result.ops[0]);
+    res.status(201).json(result.ops);
   } catch (error) {
     console.error('Erreur lors de la création de la commande :', error);
     res.status(500).json({ error: 'Erreur serveur' });
