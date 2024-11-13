@@ -136,7 +136,8 @@ app.get('/api/commandes/:id', async (req, res) => {
       
 
     ]).toArray();
-    //console.log(commande[0])
+    console.log("LA COMMANDEn°" + id)
+    console.log(commande[0])
     res.json(commande[0]);
   } catch (error) {
     console.error("Erreur lors de la récupération de la commande" + id + " :", error);
@@ -214,7 +215,7 @@ app.post('/api/articles', async (req, res) => {
   const article = req.body;
   try {
     const result = await conn.db.collection('Articles').insertOne(article);
-    res.status(201).json(result.ops[0]);
+    res.status(201).json(result.ops);
   } catch (error) {
     console.error('Erreur lors de la création de l\'article :', error);
     res.status(500).json({ error: 'Erreur serveur' });
