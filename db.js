@@ -73,6 +73,12 @@ app.get('/api/commandes/:id', async (req, res) => {
       { $limit: 1 },
       // On va séparer les lignes de détails pour les traiter une par une
       { $unwind: '$LignesDeCommande' },
+
+      {
+        $set: {
+          'LignesDeCommande.Article': { $toObjectId: '$LignesDeCommande.Article' }
+        }
+      },
       // On fait un "join" avec la collection Articles
       {
         $lookup: {
