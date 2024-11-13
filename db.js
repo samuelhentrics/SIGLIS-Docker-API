@@ -232,6 +232,7 @@ app.post('/api/articles', async (req, res) => {
 app.post('/api/commandes', async (req, res) => {
   const commande = req.body;
   try {
+    console.log(commande)
     const result = await conn.db.collection('Commandes').insertOne(commande);
     res.status(201).json(result.ops[0]);
   } catch (error) {
